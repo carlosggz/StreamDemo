@@ -1,0 +1,60 @@
+spring:
+  application:
+    name: rabbit-stream-consumer
+  cloud:
+    stream:
+      defaultBinder: rabbit
+      bindings:
+        PersonsInputChannel:
+          destination: persons-topic
+          group: group1
+          consumer:
+            concurrency: 5
+        OthersInputChannel:
+          destination: persons-topic
+          group: group2
+          consumer:
+            concurrency: 5
+        AllInputChannel:
+          destination: persons-topic
+          group: group3
+          consumer:
+            concurrency: 5
+      rabbit:
+        bindings:
+          PersonsInputChannel:
+            consumer:
+              durableSubscription: false
+              autoBindDlq: true
+              republishToDlq: false
+              requeueRejected: true
+              maxAttempts: 3
+              transacted: true
+              durable: false
+              bindingRoutingKey: first.*.key,third.*.key
+              bindingRoutingKeyDelimiter: ','
+          OthersInputChannel:
+            consumer:
+              durableSubscription: false
+              autoBindDlq: true
+              republishToDlq: false
+              requeueRejected: true
+              maxAttempts: 3
+              transacted: true
+              durable: false
+              bindingRoutingKey: second.*.key
+          AllInputChannel:
+            consumer:
+              durableSubscription: false
+              autoBindDlq: true
+              republishToDlq: false
+              requeueRejected: true
+              maxAttempts: 3
+              transacted: true
+              durable: false
+              bindingRoutingKey: "*.*.key"
+  rabbitmq:
+    broker-url: tcp://127.0.0.1:5672
+    username: myuser
+    password: mypass
+    host: localhost

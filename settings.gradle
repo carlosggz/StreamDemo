@@ -1,0 +1,4 @@
+rootProject.name = 'StreamDemo'
+
+include 'producer'
+include 'consumer'

@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: rabbit-stream-producer
+  cloud:
+    stream:
+      defaultBinder: rabbit
+      bindings:
+        PersonsOutputChannel:
+          destination: persons-topic
+          content-type: application/json
+      rabbit:
+        bindings:
+          PersonsOutputChannel:
+            producer:
+              durable: false
+              transacted: true
+              routing-key-expression: headers.myRoutingKey
+              exchangeType: topic
+
+
+  rabbitmq:
+    broker-url: tcp://127.0.0.1:5672
+    username: myuser
+    password: mypass
+    host: localhost
